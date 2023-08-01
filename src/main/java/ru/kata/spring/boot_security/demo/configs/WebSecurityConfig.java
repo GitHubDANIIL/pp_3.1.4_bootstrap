@@ -1,5 +1,6 @@
 package ru.kata.spring.boot_security.demo.configs;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
@@ -10,11 +11,20 @@ import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.provisioning.InMemoryUserDetailsManager;
+import ru.kata.spring.boot_security.demo.services.UserService;
 
 @Configuration
 @EnableWebSecurity
 public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
+
+    private UserService userService;
     private final SuccessUserHandler successUserHandler;
+
+    @Autowired
+    public WebSecurityConfig(UserService userService, SuccessUserHandler successUserHandler) {
+        this.userService = userService;
+        this.successUserHandler = successUserHandler;
+    }
 
     public WebSecurityConfig(SuccessUserHandler successUserHandler) {
         this.successUserHandler = successUserHandler;
@@ -48,21 +58,29 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 //        return new InMemoryUserDetailsManager(user);
 //    }
 
+
+//    @Bean
+//    public UserDetailsService userDetailsService() {
+//        UserDetails user1 =
+//                User.withDefaultPasswordEncoder()
+//                .username("users")
+//                .password("users")
+//                .roles("USER")
+//                .build();
+//        UserDetails admin =
+//                User.withDefaultPasswordEncoder()
+//                .username("admin")
+//                .password("admin")
+//                .roles("USER", "ADMIN")
+//                .build();
+//        return new InMemoryUserDetailsManager(user1, admin);
+//    }
+
     @Bean
-    public UserDetailsService userDetailsService() {
-        UserDetails user1 =
-                User.withDefaultPasswordEncoder()
-                .username("users")
-                .password("users")
-                .roles("USER")
-                .build();
-        UserDetails admin =
-                User.withDefaultPasswordEncoder()
-                .username("admin")
-                .password("admin")
-                .roles("USER", "ADMIN")
-                .build();
-        return new InMemoryUserDetailsManager(user1, admin);
+    public DaoAuthenticationProvider daoAuthenticationProvider() {
+        DaoAuthenticationProvider authenticationProvider = new DaoAuthenticationProvider();
+        authenticationProvider.setUserDetailsService(userService);
+        return authenticationProvider;
     }
 
 }
