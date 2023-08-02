@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml" xmlns:th="https://www.thymeleaf.org"
+      xmlns:sec="https://www.thymeleaf.org/thymeleaf-extras-springsecurity3">
+
+<head>
+    <meta charset="UTF-8">
+    <title>All Users ADMIN page</title>
+</head>
+<body>
+<h1>User List</h1>
+<div>
+    <teble border="1">
+        <tr>
+            <th>username</th>
+            <th>age</th>
+            <th>roles</th>
+            <th>action</th>
+        </tr>
+        <tr th:each="u : ${users}">
+            <td th:utext="${u.username}"> </td>
+            <td th:utext="${u.age}"> </td>
+            <td th:utext="${u.roles}"> </td>
+            <td><a th:href="@{/{id}/update(id=${u.getId()})}">update</a></td>
+            <td><form th:method="DELETE" th:action="@{/delete/{id}(id=${u.getId()})}">
+                <input type="submit" value="delete"/>
+            </form>
+            </td>
+        </tr>
+    </teble>
+    <br/>
+    <hr/>
+    <form action="/admin/new">
+        <button>Add new user</button>
+    </form>
+</div>
+
+</body>
+</html>

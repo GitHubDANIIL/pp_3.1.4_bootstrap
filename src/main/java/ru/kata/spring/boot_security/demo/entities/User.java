@@ -8,6 +8,7 @@ import org.springframework.security.core.userdetails.UserDetails;
 import javax.persistence.*;
 import javax.validation.constraints.*;
 import java.util.Collection;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
@@ -19,32 +20,26 @@ public class User implements UserDetails {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
 
-    @Column
-    @NotEmpty(message = "Name should not be empty")
-    @Pattern(regexp = "^[a-zA-Zа-яА-Я]+$", message = "The name field can contain only letters")
-    @Size(min = 2, max = 45, message = "Name should be between 2 and 45 characters")
-    private String name;
-
-    @Column
-    @NotEmpty(message = "Surname should not be empty")
-    @Pattern(regexp = "^[a-zA-Zа-яА-Я]+$", message = "The surname field can contain only letters")
-    @Size(min = 2, max = 45, message = "SurName should be between 2 and 45 characters")
-    private String surname;
+    @Column(unique = true)
+//    @NotEmpty(message = "Username should not be empty")
+//    @Pattern(regexp = "^[a-zA-Zа-яА-Я]+$", message = "The username field can contain only letters")
+    @Size(min = 2, max = 45, message = "Username should be between 2 and 45 characters")
+    private String username;
 
     @Column
     @NotNull
     @Min(value = 0, message = "Age should be greater than 0")
     private int age;
 
-    @Column(unique = true)
-    @NotEmpty
-    private String username;
-
     @Column
-    @NotEmpty
+//    @NotEmpty
+    @Size(min = 2, max = 45, message = "Password should be between 2 and 45 characters")
     private String password;
 
-    @ManyToMany
+    @ManyToMany(cascade =CascadeType.ALL ,fetch = FetchType.EAGER)
+    @JoinTable(name = "users_roles",
+            joinColumns = @JoinColumn(name = "user_id", referencedColumnName = "id"),
+            inverseJoinColumns = @JoinColumn(name = "role_id", referencedColumnName = "id"))
     private List<Role> roles;
 
 
@@ -57,12 +52,17 @@ public class User implements UserDetails {
         this.roles = roles;
     }
 
-    public User(String name, String surname, int age, String username, String password) {
-        this.name = name;
-        this.surname = surname;
-        this.age = age;
+    public User(String username, String password, int age) {
         this.username = username;
+        this.age = age;
         this.password = password;
+    }
+
+    public User(String username, String password, List<Role> roles, int age) {
+        this.username = username;
+        this.age = age;
+        this.password = password;
+        this.roles = roles;
     }
 
     public void setUsername(String username) {
@@ -77,24 +77,8 @@ public class User implements UserDetails {
         return id;
     }
 
-    public void setId(int id) {
+    public void setId(long id) {
         this.id = id;
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
-    }
-
-    public String getSurname() {
-        return surname;
-    }
-
-    public void setSurname(String surname) {
-        this.surname = surname;
     }
 
     public int getAge() {
@@ -117,11 +101,10 @@ public class User implements UserDetails {
     public String toString() {
         return "User{" +
                 "id=" + id +
-                ", name='" + name + '\'' +
-                ", surname='" + surname + '\'' +
-                ", age=" + age +
                 ", username='" + username + '\'' +
+                ", age=" + age +
                 ", password='" + password + '\'' +
+                ", roles=" + roles +
                 '}';
     }
 

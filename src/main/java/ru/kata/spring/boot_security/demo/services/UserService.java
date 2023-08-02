@@ -1,36 +1,18 @@
 package ru.kata.spring.boot_security.demo.services;
 
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.security.core.userdetails.UserDetailsService;
-import org.springframework.security.core.userdetails.UsernameNotFoundException;
-import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
-import ru.kata.spring.boot_security.demo.repositories.UserRepository;
 import ru.kata.spring.boot_security.demo.entities.User;
 
-@Service
-public class UserService implements UserDetailsService {
+import java.util.List;
 
-    private UserRepository userRepository;
+public interface UserService {
 
-    @Autowired
-    public void setUserRepository(UserRepository userRepository) {
-        this.userRepository = userRepository;
-    }
+    List<User> getAllUsers();
 
-    public User findByUsername(String username) {
-        return userRepository.findByUsername(username);
-    }
+    User getUserByid(Long id);
 
-    @Override
-    @Transactional
-    public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-        User user = findByUsername(username);
-        if (user == null) {
-            throw new UsernameNotFoundException(String.format("User '%s' not found", username ));
-        }
+    void save(User user);
 
-        return new User(user.getUsername(), user.getPassword(), user.getRoles());
-    }
+    void update(User user, Long id);
+
+    void delete(User user, Long id);
 }
