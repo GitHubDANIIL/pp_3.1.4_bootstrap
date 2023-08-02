@@ -16,20 +16,35 @@
     <br/>
     <br/>
 
+    <label for="password">Enter password: </label>
+    <input type="text" th:field="*{password}" id="password"/>
+    <div style="color: red" th:if="${#fields.hasErrors('password')}" th:errors="*{password}">Error password</div>
+    <br/>
+    <br/>
+
     <label for="age">Enter age: </label>
     <input type="text" th:field="*{age}" id="age"/>
     <div style="color: red" th:if="${#fields.hasErrors('age')}" th:errors="*{age}">Error age</div>
     <br/>
     <br/>
 
-    <label for="roles">Enter age: </label>
-    <input type="text" th:field="*{roles}" id="roles"/>
-    <br/>
-    <br/>
-    <label for="role">Роль 1 (ADMIN) или 2 (USER) ?</label>
-    <input type="text" th:field="*{roles}" id="role">
 
+    <form th:action="@{/admin/new}" th:object="${user}" method="post">
+        <p>
+            <label>Roles:
+                <input type="checkbox" name="roles"
+                       th:each="r : ${allRoles}"
+                       th:text="${r.name}"
+                       th:value="${r.id}"
+                       th:field="*{roles}"
+                />
+            </label>
+        </p>
+    </form>
 
+<!--    <label for="role">Роль 1 (ADMIN) или 2 (USER) ?</label>-->
+<!--    <input type="text" th:field="*{roles}" id="role">-->
+    <br/>
     <br/>
     <input type="submit" value="Create!"/>
 </form>

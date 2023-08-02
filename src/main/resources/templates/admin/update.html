@@ -16,14 +16,20 @@
     <br/>
     <br/>
 
+    <label for="password">Enter password: </label>
+    <input type="text" th:field="*{password}" id="password"/>
+    <div style="color: red" th:if="${#fields.hasErrors('password')}" th:errors="*{password}">Error password</div>
+    <br/>
+    <br/>
+
     <label for="age">Enter age: </label>
     <input type="text" th:field="*{age}" id="age"/>
     <div style="color: red" th:if="${#fields.hasErrors('age')}" th:errors="*{age}">Error age</div>
     <br/>
     <br/>
 
-    <label for="roles">Enter age: </label>
-    <input type="text" th:field="*{roles}" id="roles"/>
+<!--    <label for="roles">Enter role: </label>-->
+<!--    <input type="text" th:field="*{roles}" id="roles"/>-->
     <br/>
     <br/>
     <label for="role">Роль 1 (ADMIN) или 2 (USER) ?</label>

@@ -6,7 +6,7 @@
 </head>
 <body>
 <h1>User, welcome spring boot security page!</h1>
-<form th:method="POST" th:action="@{/}" th:object="user">
+<form th:method="POST" th:action="@{/user}" th:object="${user}">
     <div>
         <td th:utext="${user.username}">Username</td>
         <br/>
