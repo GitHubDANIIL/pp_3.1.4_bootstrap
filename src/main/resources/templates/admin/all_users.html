@@ -9,7 +9,7 @@
 <body>
 <h1>User List</h1>
 <div>
-    <teble border="1">
+    <table border="1">
         <tr>
             <th>username</th>
             <th>age</th>
@@ -20,19 +20,22 @@
             <td th:utext="${u.username}"> </td>
             <td th:utext="${u.age}"> </td>
             <td th:utext="${u.roles}"> </td>
-            <td><a th:href="@{/{id}/update(id=${u.getId()})}">update</a></td>
-            <td><form th:method="DELETE" th:action="@{/delete/{id}(id=${u.getId()})}">
+            <td><a th:href="@{/admin/user/{id}(id=${u.getId()})}">update</a></td>
+            <td><form th:method="DELETE" th:action="@{/admin/delete/{id}(id=${u.getId()})}">
                 <input type="submit" value="delete"/>
             </form>
             </td>
         </tr>
-    </teble>
+    </table>
     <br/>
     <hr/>
-    <form action="/admin/new">
+    <form action="/admin/new_user">
         <button>Add new user</button>
     </form>
 </div>
+<form th:method="POST" th:action="@{/logout}">
+    <input type="submit" value="Log Out"/>
+</form>
 
 </body>
 </html>

@@ -8,16 +8,22 @@
 <h1>User, welcome spring boot security page!</h1>
 <form th:method="POST" th:action="@{/user}" th:object="${user}">
     <div>
-        <td th:utext="${user.username}">Username</td>
+        <p>Username : </p>
+        <td th:utext="'Username : ' + ${user.username}">Username</td>
         <br/>
         <hr/>
-        <td th:utext="${user.age}">Age</td>
+        <p>Age : </p>
+        <td th:utext="'Age : ' + ${user.age}">Age</td>
         <br/>
         <hr/>
-        <td th:utext="${user.roles}">Role</td>
+        <p>Role : </p>
+        <td th:utext="'Role : ' + ${user.roles}">Role</td>
         <br/>
         <hr/>
     </div>
 </form>
+    <form th:method="POST" th:action="@{/logout}">
+        <input type="submit" value="Log Out"/>
+    </form>
 </body>
 </html>

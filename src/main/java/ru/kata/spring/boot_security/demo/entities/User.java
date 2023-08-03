@@ -7,10 +7,7 @@ import org.springframework.security.core.userdetails.UserDetails;
 
 import javax.persistence.*;
 import javax.validation.constraints.*;
-import java.util.Collection;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 
 @Entity
 @Table(name = "users")
@@ -21,8 +18,6 @@ public class User implements UserDetails {
     private long id;
 
     @Column(unique = true)
-//    @NotEmpty(message = "Username should not be empty")
-//    @Pattern(regexp = "^[a-zA-Zа-яА-Я]+$", message = "The username field can contain only letters")
     @Size(min = 2, max = 45, message = "Username should be between 2 and 45 characters")
     private String username;
 
@@ -32,21 +27,20 @@ public class User implements UserDetails {
     private int age;
 
     @Column
-//    @NotEmpty
     @Size(min = 2, max = 45, message = "Password should be between 2 and 45 characters")
     private String password;
 
-    @ManyToMany(cascade =CascadeType.ALL ,fetch = FetchType.EAGER)
+    @ManyToMany(cascade = CascadeType.MERGE, fetch = FetchType.LAZY)
     @JoinTable(name = "users_roles",
             joinColumns = @JoinColumn(name = "user_id", referencedColumnName = "id"),
             inverseJoinColumns = @JoinColumn(name = "role_id", referencedColumnName = "id"))
-    private List<Role> roles;
+    private Set<Role> roles;
 
 
     public User() {
     }
 
-    public User(String username, String password, List<Role> roles) {
+    public User(String username, String password, Set<Role> roles) {
         this.username = username;
         this.password = password;
         this.roles = roles;
@@ -58,7 +52,7 @@ public class User implements UserDetails {
         this.password = password;
     }
 
-    public User(String username, String password, List<Role> roles, int age) {
+    public User(String username, String password, Set<Role> roles, int age) {
         this.username = username;
         this.age = age;
         this.password = password;
@@ -89,12 +83,17 @@ public class User implements UserDetails {
         this.age = age;
     }
 
-    public List<Role> getRoles() {
+    public Set<Role> getRoles() {
         return roles;
     }
 
-    public void setRoles(List<Role> roles) {
+    public void setRoles(Set<Role> roles) {
         this.roles = roles;
+    }
+
+    public void addRole(Role role) {
+        Set<Role> newRoleset = this.roles;
+        newRoleset.add(role);
     }
 
     @Override
