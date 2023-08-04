@@ -17,19 +17,16 @@ import java.security.Principal;
 public class UserController {
 
     private UserService userService;
-    private UserRepository userRepository;
-    private RoleRepository roleRepository;
+
 
     @Autowired
-    public UserController(UserService userService, UserRepository userRepository, RoleRepository roleRepository) {
+    public UserController(UserService userService) {
         this.userService = userService;
-        this.userRepository = userRepository;
-        this.roleRepository = roleRepository;
     }
 
     @GetMapping()
     public String getUserPage(Principal principal, ModelMap modelMap) {
-        User user = userRepository.findByUsername(principal.getName());
+        User user = userService.getByUsername(principal.getName());
         modelMap.addAttribute("user", user);
         return "/user/my_page";
     }

@@ -27,18 +27,13 @@ public class User implements UserDetails {
     private int age;
 
     @Column
-    @Size(min = 2, max = 45, message = "Password should be between 2 and 45 characters")
+    @Size(min = 2, message = "The password must contain at least 2 characters")
     private String password;
 
-    @ManyToMany
+    @ManyToMany(fetch = FetchType.EAGER)
     @JoinTable(name = "users_roles",
     joinColumns = @JoinColumn(name = "user_id"),
     inverseJoinColumns = @JoinColumn(name = "role_id"))
-
-//    @ManyToMany(cascade = CascadeType.MERGE, fetch = FetchType.LAZY)
-//    @JoinTable(name = "users_roles",
-//            joinColumns = @JoinColumn(name = "user_id", referencedColumnName = "id"),
-//            inverseJoinColumns = @JoinColumn(name = "role_id", referencedColumnName = "id"))
     private Set<Role> roles = new HashSet<>();
 
 

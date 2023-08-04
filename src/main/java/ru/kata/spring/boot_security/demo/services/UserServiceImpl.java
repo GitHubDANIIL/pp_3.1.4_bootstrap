@@ -6,6 +6,7 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import ru.kata.spring.boot_security.demo.dao.UserDAO;
 import ru.kata.spring.boot_security.demo.repositories.UserRepository;
 import ru.kata.spring.boot_security.demo.entities.User;
 
@@ -15,11 +16,13 @@ import java.util.Optional;
 @Service
 public class UserServiceImpl implements UserDetailsService, UserService {
 
+    private UserDAO userDAO;
     private UserRepository userRepository;
 
     @Autowired
-    public void setUserRepository(UserRepository userRepository) {
+    public void setUserRepository(UserRepository userRepository, UserDAO userDAO) {
         this.userRepository = userRepository;
+        this.userDAO = userDAO;
     }
 
 
@@ -30,40 +33,44 @@ public class UserServiceImpl implements UserDetailsService, UserService {
         if (user == null) {
             throw new UsernameNotFoundException(String.format("User '%s' not found", username));
         }
-
-        return new org.springframework.security.core.userdetails.User(user.getUsername(), user.getPassword(), user.getRoles());
+        return user;
     }
 
+    @Transactional(readOnly = true)
     public User getByUsername(String username) {
 
-        return userRepository.findByUsername(username);
+        return userDAO.getByUsername(username);
     }
 
     @Override
+    @Transactional(readOnly = true)
     public List<User> getAllUsers() {
-        return userRepository.findAll();
+        return userDAO.getAllUsers();
     }
 
     @Override
+    @Transactional(readOnly = true)
     public User getUserByid(long id) {
-        Optional<User> user = userRepository.findById(id);
+        Optional<User> user = userDAO.getUserByid(id);
         return user.orElse(null);
     }
 
     @Override
+    @Transactional
     public void save(User user) {
-        userRepository.save(user);
+        userDAO.save(user);
     }
 
     @Override
+    @Transactional
     public void update(User user, long id) {
-        user.setId(id);
-        userRepository.save(user);
+        userDAO.update(user, id);
     }
 
     @Override
-    public void delete(long id) {
-        userRepository.deleteById(id);
+    @Transactional
+    public void deleteUserByid(long id) {
+        userDAO.deleteUserByid(id);
     }
 
 

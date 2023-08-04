@@ -6,8 +6,6 @@ import org.springframework.ui.ModelMap;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 import ru.kata.spring.boot_security.demo.entities.User;
-import ru.kata.spring.boot_security.demo.repositories.RoleRepository;
-import ru.kata.spring.boot_security.demo.repositories.UserRepository;
 import ru.kata.spring.boot_security.demo.services.RoleService;
 import ru.kata.spring.boot_security.demo.services.UserService;
 
@@ -18,15 +16,11 @@ import javax.validation.Valid;
 public class AdminController {
 
     private UserService userService;
-    private UserRepository userRepository;
-    private RoleRepository roleRepository;
     private RoleService roleService;
 
     @Autowired
-    public AdminController(UserService userService, UserRepository userRepository, RoleRepository roleRepository, RoleService roleService) {
+    public AdminController(UserService userService, RoleService roleService) {
         this.userService = userService;
-        this.userRepository = userRepository;
-        this.roleRepository = roleRepository;
         this.roleService = roleService;
     }
 
@@ -71,7 +65,7 @@ public class AdminController {
 
     @DeleteMapping("/delete/{id}")
     public String deleteUser(@PathVariable(name = "id") long id) {
-        userService.delete(id);
+        userService.deleteUserByid(id);
         return "redirect:/admin";
     }
 
