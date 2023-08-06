@@ -24,7 +24,7 @@ public class User implements UserDetails {
     @Column
     @NotNull
     @Min(value = 0, message = "Age should be greater than 0")
-    private int age;
+    private Integer age;
 
     @Column
     @Size(min = 2, message = "The password must contain at least 2 characters")
@@ -46,13 +46,13 @@ public class User implements UserDetails {
         this.roles = roles;
     }
 
-    public User(String username, String password, int age) {
+    public User(String username, String password, Integer age) {
         this.username = username;
         this.age = age;
         this.password = password;
     }
 
-    public User(String username, String password, Set<Role> roles, int age) {
+    public User(String username, String password, Set<Role> roles, Integer age) {
         this.username = username;
         this.age = age;
         this.password = password;
@@ -75,16 +75,22 @@ public class User implements UserDetails {
         this.id = id;
     }
 
-    public int getAge() {
+    public Integer getAge() {
         return age;
     }
 
-    public void setAge(int age) {
+    public void setAge(Integer age) {
         this.age = age;
     }
 
     public Set<Role> getRoles() {
         return roles;
+    }
+
+    public String getRoleToString() {
+        StringBuilder sb = new StringBuilder("");
+        this.roles.forEach(role -> sb.append(role.getName()));
+        return sb.toString();
     }
 
     public void setRoles(Set<Role> roles) {
