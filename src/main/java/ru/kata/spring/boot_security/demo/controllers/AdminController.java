@@ -5,7 +5,6 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
-import ru.kata.spring.boot_security.demo.entities.Role;
 import ru.kata.spring.boot_security.demo.entities.User;
 import ru.kata.spring.boot_security.demo.services.RoleService;
 import ru.kata.spring.boot_security.demo.services.UserService;
@@ -35,28 +34,14 @@ public class AdminController {
         return "/admin/all_users";
     }
 
-//    @GetMapping("/new_user")
-//    public String newUser(@ModelAttribute("user") User user, ModelMap modelMap) {
-//        modelMap.addAttribute("roles", roleService.findAll());
-//        return "admin/create_user";
-//    }
-
     @PostMapping()
     public String regUser(@ModelAttribute("user") @Valid User user, BindingResult bindingResult) {
         userService.save(user);
         return "redirect:/admin";
     }
 
-//    @GetMapping("/user/{id}")
-//    public String getUpdate(ModelMap modelMap, @PathVariable(name = "id") long id) {
-//        modelMap.addAttribute("user", userService.getUserByid(id));
-//        modelMap.addAttribute("roles", roleService.findAll());
-//        return "/admin/update_user";
-//    }
-
-
-    @PatchMapping("/update/{id}")
-    public String updateUser(@ModelAttribute("user") @Valid User user,
+    @PutMapping("/{id}")
+    public String updateUser(@ModelAttribute("user") User user,
                              @PathVariable("id") long id) {
 
         userService.update(user, id);

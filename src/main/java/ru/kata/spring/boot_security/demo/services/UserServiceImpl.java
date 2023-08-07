@@ -40,7 +40,7 @@ public class UserServiceImpl implements UserService {
 
     @Override
     @Transactional(readOnly = true)
-    public User getUserByid(long id) {
+    public User getUserById(long id) {
         Optional<User> user = userDAO.getUserByid(id);
         return user.orElse(null);
     }
@@ -55,7 +55,9 @@ public class UserServiceImpl implements UserService {
     @Override
     @Transactional
     public void update(User user, long id) {
+        if (user.getPassword() != null) {
         user.setPassword(passwordEncoder.encode(user.getPassword()));
+        }
         userDAO.update(user, id);
     }
 

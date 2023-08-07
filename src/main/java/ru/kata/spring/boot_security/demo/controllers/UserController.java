@@ -6,8 +6,6 @@ import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import ru.kata.spring.boot_security.demo.entities.User;
-import ru.kata.spring.boot_security.demo.repositories.RoleRepository;
-import ru.kata.spring.boot_security.demo.repositories.UserRepository;
 import ru.kata.spring.boot_security.demo.services.UserService;
 
 import java.security.Principal;
@@ -24,7 +22,7 @@ public class UserController {
         this.userService = userService;
     }
 
-    @GetMapping("user/")
+    @GetMapping("user")
     public String getUserPage(Principal principal, ModelMap modelMap) {
         User user = userService.getByUsername(principal.getName());
         modelMap.addAttribute("user", user);
