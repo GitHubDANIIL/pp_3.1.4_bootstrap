@@ -44,12 +44,12 @@ public class Role implements GrantedAuthority {
     }
 
     @Override
-    public String toString() {
-        return this.name;
+    public String getAuthority() {
+        return getName();
     }
 
     @Override
-    public String getAuthority() {
-        return getName();
+    public String toString() {
+        return this.name;
     }
 }
